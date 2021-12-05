@@ -18,31 +18,40 @@ namespace AdventOfCode2021.Solutions
 
         public int Part1(string[] input)
         {
-            var game = ParseInput(input);
+            var winner = PlayBingo(input).First();
 
-            foreach(var number in game.numbers)
+            return winner.Number * winner.Card.SumOfUnmarkedNumbers();
+        }
+
+        //Return list
+        public IEnumerable<WinningCard> PlayBingo(string[] input)
+        {
+            var (numbers, bingoCards) = ParseInput(input);
+
+            foreach (var number in numbers)
             {
-                //process each number
-                foreach(var card in game.bingoCards)
+                foreach (var card in bingoCards)
                 {
                     card.MarkNumber(number);
                 }
-                var winningCard = game.bingoCards.SingleOrDefault(x => x.HasWon());
-                if (winningCard == null)
+                var winners = new List<BingoCard>(bingoCards.Where(x => x.HasWon()));
+
+                if (!winners.Any())
                     continue;
-
-                return winningCard.SumOfUnmarkedNumbers() * number;
+                
+                foreach (var winner in winners)
+                {
+                    bingoCards.Remove(winner);
+                    yield return new WinningCard(winner, number);
+                }
             }
-
-            game.bingoCards[0].MarkNumber(22);
-            
-            return 0;
         }
-
 
         public int Part2(string[] input)
         {
-            return 0;
+            var winner = PlayBingo(input).Last();
+
+            return winner.Number * winner.Card.SumOfUnmarkedNumbers();
         }
     }
     
@@ -86,4 +95,5 @@ namespace AdventOfCode2021.Solutions
     {
         public bool Chosen { get;set; }
     };
+    public record WinningCard(BingoCard Card, int Number);
 }
