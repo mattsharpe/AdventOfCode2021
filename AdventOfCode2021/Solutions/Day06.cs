@@ -1,42 +1,38 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace AdventOfCode2021.Solutions
 {
     public class Day06
     {
-        public int Part1(string input)
+        public long Part1(string input)
         {
-            var lanternFish = input.Split(',').Select(int.Parse).ToList();
-            
-            foreach(int i in Enumerable.Range(0, 80))
-            {
-                ProcessIteration(lanternFish);
-            }
+            var fish = ParseInput(input);
 
-            return lanternFish.Count;
+            SimulateDays(fish, 80);
+
+            return fish.Sum();
         }
 
-        public void ProcessIteration(List<int> fish)
-        {
-
-            for (int i = 0; i < fish.Count; i++)
-            {
-                fish[i]--;                
-            }
-
-            var newFish = fish.Count(x => x == -1);
-            fish.RemoveAll(x => x == -1);
-
-            Enumerable.Range(0, newFish).ToList().ForEach(x =>
-            {
-                fish.Add(6);
-                fish.Add(8);
-            });
-
-        }
 
         public long Part2(string input)
+        {
+            var fish = ParseInput(input);
+
+            SimulateDays(fish, 256);
+
+            return fish.Sum();
+            
+        }
+
+        public void SimulateDays(long[] fish, int days)
+        {
+            foreach (var _ in Enumerable.Range(0, days))
+            {
+                ProcessIteration(fish);
+            }
+        }
+
+        public long[] ParseInput(string input)
         {
             var lanternFish = input.Split(',').Select(long.Parse).ToList();
             long[] fish = new long[9];
@@ -47,32 +43,24 @@ namespace AdventOfCode2021.Solutions
                 fish[item.Key] = item.Count();
             }
 
-            foreach (int i in Enumerable.Range(0, 256))
-            {
-                ProcessIteration(fish);
-            }
-
-            return fish.Sum();
-            
-        }
+            return fish;
+        }        
 
         public void ProcessIteration(long[] fish)
         {
             //put in temp array to avoid royally fucking things up as you go.
             var temp = new long[9];
-            for (int i = fish.Length - 1; i >= 0; i--)
+            for (var i = 0; i < fish.Length; i++)
             {
-                switch (i)
+                if(i == 0)
                 {
-                    case 0:
-                        temp[8] = fish[0];
-                        temp[6] += fish[0];
-                        break;
-                    default:
-                        temp[i - 1] += fish[i];
-                        break;
+                    temp[8] = fish[0];
+                    temp[6] += fish[0];
+                } 
+                else
+                {
+                    temp[i - 1] += fish[i];
                 }
-
             }
             temp.CopyTo(fish, 0);
         }
