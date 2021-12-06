@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Text.RegularExpressions;
 
 namespace AdventOfCode2021.Solutions
 {
@@ -22,7 +19,6 @@ namespace AdventOfCode2021.Solutions
 
         public void ProcessIteration(List<int> fish)
         {
-            //Console.WriteLine(string.Join(",", fish));
 
             for (int i = 0; i < fish.Count; i++)
             {
@@ -30,38 +26,55 @@ namespace AdventOfCode2021.Solutions
             }
 
             var newFish = fish.Count(x => x == -1);
-            //Console.WriteLine(newFish);
             fish.RemoveAll(x => x == -1);
+
             Enumerable.Range(0, newFish).ToList().ForEach(x =>
             {
                 fish.Add(6);
                 fish.Add(8);
             });
 
-            //Console.WriteLine(string.Join(",",fish));
         }
 
-        public int Part2(string input)
+        public long Part2(string input)
         {
+            var lanternFish = input.Split(',').Select(long.Parse).ToList();
+            long[] fish = new long[9];
 
-            //Obviously not. 
-
-            //If we don't need the actual list to be correct can we group them by their counter and then work with that?
-            /*
-             * [0] = 1
-             * 
-             * Then each iteration just shuffle the counts around and introduce new ones to [8] when necessary?
-             * */
-            
-            var lanternFish = input.Split(',').Select(int.Parse).ToList();
-
-            foreach (int i in Enumerable.Range(0, 200))
+            var lookup = lanternFish.GroupBy(x => x);
+            foreach (var item in lookup)
             {
-                ProcessIteration(lanternFish);
+                fish[item.Key] = item.Count();
             }
 
-            return lanternFish.Count;
-            //256
+            foreach (int i in Enumerable.Range(0, 256))
+            {
+                ProcessIteration(fish);
+            }
+
+            return fish.Sum();
+            
+        }
+
+        public void ProcessIteration(long[] fish)
+        {
+            //put in temp array to avoid royally fucking things up as you go.
+            var temp = new long[9];
+            for (int i = fish.Length - 1; i >= 0; i--)
+            {
+                switch (i)
+                {
+                    case 0:
+                        temp[8] = fish[0];
+                        temp[6] += fish[0];
+                        break;
+                    default:
+                        temp[i - 1] += fish[i];
+                        break;
+                }
+
+            }
+            temp.CopyTo(fish, 0);
         }
     }
 }
