@@ -41,13 +41,13 @@ namespace AdventOfCode2021.Tests
         [TestMethod]
         public void Part2_Sample()
         {
-            Assert.AreEqual(0, _day09.Part2(_sample));
+            Assert.AreEqual(1134, _day09.Part2(_sample));
         }
 
         [TestMethod]
         public void Part2()
         {
-            Assert.AreEqual(0, _day09.Part2(Input));
+            Assert.AreEqual(1092012, _day09.Part2(Input));
         }
     }
 }
