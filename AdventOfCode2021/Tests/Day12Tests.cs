@@ -22,6 +22,42 @@ namespace AdventOfCode2021.Tests
             "b-end",
         };
 
+        private readonly string[] _sample2 =
+        {
+            "dc-end",
+            "HN-start",
+            "start-kj",
+            "dc-start",
+            "dc-HN",
+            "LN-dc",
+            "HN-end",
+            "kj-sa",
+            "kj-HN",
+            "kj-dc",
+        };
+
+        private readonly string[] _sample3 =
+        {
+            "fs-end",
+            "he-DX",
+            "fs-he",
+            "start-DX",
+            "pj-DX",
+            "end-zg",
+            "zg-sl",
+            "zg-pj",
+            "pj-he",
+            "RW-he",
+            "fs-DX",
+            "pj-RW",
+            "zg-RW",
+            "start-pj",
+            "he-WI",
+            "zg-he",
+            "pj-fs",
+            "start-RW",
+        };
+
         [TestInitialize]
         public void Initialize()
         {
@@ -37,49 +73,13 @@ namespace AdventOfCode2021.Tests
         [TestMethod]
         public void Part1_Sample2()
         {
-            var input = new[]
-            {
-                "dc-end",
-                "HN-start",
-                "start-kj",
-                "dc-start",
-                "dc-HN",
-                "LN-dc",
-                "HN-end",
-                "kj-sa",
-                "kj-HN",
-                "kj-dc",
-            };
-
-            Assert.AreEqual(19, _day12.Part1(input));
+            Assert.AreEqual(19, _day12.Part1(_sample2));
         }
 
         [TestMethod]
         public void Part1_Sample3()
         {
-            var input = new[]
-            {
-                "fs-end",
-                "he-DX",
-                "fs-he",
-                "start-DX",
-                "pj-DX",
-                "end-zg",
-                "zg-sl",
-                "zg-pj",
-                "pj-he",
-                "RW-he",
-                "fs-DX",
-                "pj-RW",
-                "zg-RW",
-                "start-pj",
-                "he-WI",
-                "zg-he",
-                "pj-fs",
-                "start-RW",
-            };
-
-            Assert.AreEqual(226, _day12.Part1(input));
+            Assert.AreEqual(226, _day12.Part1(_sample3));
         }
 
         [TestMethod]
@@ -91,13 +91,25 @@ namespace AdventOfCode2021.Tests
         [TestMethod]
         public void Part2_Sample()
         {
-            Assert.AreEqual(0, _day12.Part2(_sample));
+            Assert.AreEqual(36, _day12.Part2(_sample));
+        }
+
+        [TestMethod]
+        public void Part2_Sample2()
+        {
+            Assert.AreEqual(103, _day12.Part2(_sample2));
+        }
+
+        [TestMethod]
+        public void Part2_Sample3()
+        {
+            Assert.AreEqual(3509, _day12.Part2(_sample3));
         }
 
         [TestMethod]
         public void Part2()
         {
-            Assert.AreEqual(0, _day12.Part2(Input));
+            Assert.AreEqual(133360, _day12.Part2(Input));
         }
     }
 }
