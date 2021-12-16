@@ -1,8 +1,7 @@
 ﻿
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Runtime.CompilerServices;
 
 namespace AdventOfCode2021.Solutions
 {
@@ -36,64 +35,53 @@ namespace AdventOfCode2021.Solutions
 
                 result[split[0]] = left;
                 result[split[1]] = right;
-                
             }
 
             return result;
         }
 
-        private int CountPaths(Dictionary<string, List<string>> map, bool part2 = false)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int CountPaths(IReadOnlyDictionary<string, List<string>> map, bool part2 = false)
         {
-
             //This is hte recursive call - defined as an inline method here
             // build a list of the explored path, creating a new copy of exploration so far and pass that into the recursive call.
-            IEnumerable<List<string>> ExploreCave(List<string> currentPath)
+            IEnumerable<Dictionary<string, int>> ExploreCave(Dictionary<string, int> visits, string currentCave)
             {
-
                 //if we made this a dictionary keyed on the cave name with the value as the visit count?
+                var result = new List<Dictionary<string, int>> { visits };
 
+                var count = visits.GetValueOrDefault(currentCave);
+                visits[currentCave] = ++count;
 
-                var currentCave = currentPath.Last();
-                var result = new List<List<string>> { currentPath };
-                
                 //Once we reach the end cave, stop
                 if (currentCave == "end")
                 {
+                    //Console.WriteLine();
                     return result;
                 }
-
-                var visitLimit = part2 ? 2: 1;
-
-                var visitFrequency = currentPath.Where(x => x.ToLower() == x && x != "start").ToLookup(x=>x);
-
+                
                 //If we've already been to a small cave more than once we're not going into another multiple times
-                if (visitFrequency.Any(x=> x.Count() > 1))
-                {
-                    visitLimit = 1;
-                }
+                var visitLimit = visits.Any(x => x.Key.ToLower() == x.Key && x.Value > 1) || !part2 ? 1 : 2;
 
-                var toExplore = map[currentCave].OrderBy(x=>x).Where(x =>
+                var toExplore = map[currentCave].Where(x =>
                     x.ToUpper() == x ||
-                    visitFrequency[x].Count() < visitLimit &&
+                    visits.GetValueOrDefault(x) < visitLimit &&
                     x != "start");
 
                 foreach (var cave in toExplore)
                 {
-                    var next = new List<string>(currentPath) { cave };
-                    
-                    result.AddRange(ExploreCave(next));
+                    var next = new Dictionary<string, int>(visits);
+                    var child = ExploreCave(next, cave);
+                    result.AddRange(child);
                 }
+
                 return result;
             }
 
-            var paths = ExploreCave(new List<string>{ "start" })
-                .Where(path => path.Last() == "end");
+            var paths = ExploreCave(new Dictionary<string, int>(), "start")
+                .Where(x=>x.ContainsKey("end"));
 
             return paths.Count();
         }
-
-        
-
-
     }
 }

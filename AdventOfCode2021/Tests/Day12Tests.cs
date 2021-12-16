@@ -112,4 +112,5 @@ namespace AdventOfCode2021.Tests
             Assert.AreEqual(133360, _day12.Part2(Input));
         }
     }
+
 }
