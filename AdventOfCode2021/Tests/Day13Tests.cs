@@ -1,4 +1,5 @@
-﻿using AdventOfCode2021.Solutions;
+﻿using System;
+using AdventOfCode2021.Solutions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
@@ -57,13 +58,33 @@ namespace AdventOfCode2021.Tests
         [TestMethod]
         public void Part2_Sample()
         {
-            Assert.AreEqual(0, _day13.Part2(_sample));
+            var array = new[]
+            {
+                "#####",
+                "#   #",
+                "#   #",
+                "#   #",
+                "#####"
+            };
+            var expected = string.Join(Environment.NewLine, array);
+
+            Assert.AreEqual(expected, _day13.Part2(_sample));
         }
 
         [TestMethod]
         public void Part2()
         {
-            Assert.AreEqual(0, _day13.Part2(Input));
+            var array = new[]
+            {
+                "#  # #    ###  #  # ###   ##  #### ### ",
+                "#  # #    #  # #  # #  # #  # #    #  #",
+                "#### #    ###  #  # ###  #    ###  #  #",
+                "#  # #    #  # #  # #  # # ## #    ### ",
+                "#  # #    #  # #  # #  # #  # #    # # ",
+                "#  # #### ###   ##  ###   ### #    #  #"
+            };
+            var expected = string.Join(Environment.NewLine, array);
+            Assert.AreEqual(expected, _day13.Part2(Input));
         }
     }
 
