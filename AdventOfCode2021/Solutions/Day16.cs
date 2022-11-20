@@ -29,8 +29,8 @@ namespace AdventOfCode2021.Solutions
             switch (packet.Type)
             {
                 case 0:
-                    result = packet.ChildPackets.Sum(CalculatePacketValue);
-                    break;
+                    return packet.ChildPackets.Sum(CalculatePacketValue);
+                    
                 case 1:
                     result = 1;
                     foreach (var child in packet.ChildPackets)
@@ -39,23 +39,17 @@ namespace AdventOfCode2021.Solutions
                     }
                     break;
                 case 2:
-                    result = packet.ChildPackets.Min(CalculatePacketValue);
-                    break;
+                    return packet.ChildPackets.Min(CalculatePacketValue);
                 case 4:
-                    result = packet.Value;
-                    break;
+                    return packet.Value;
                 case 3:
-                    result = packet.ChildPackets.Max(CalculatePacketValue);
-                    break;
+                    return packet.ChildPackets.Max(CalculatePacketValue);
                 case 5:
-                    result = values.First() > values.Last() ? 1 : 0;
-                    break;
+                    return values.First() > values.Last() ? 1 : 0;
                 case 6:
-                    result = values.First() < values.Last() ? 1 : 0;
-                    break;
+                    return values.First() < values.Last() ? 1 : 0;
                 case 7:
-                    result = values.First() == values.Last() ? 1 : 0;
-                    break;
+                    return values.First() == values.Last() ? 1 : 0;
 
             }
 
@@ -180,11 +174,6 @@ class Parser
         _currentLocation += length;
 
         return binaryString;
-    }
-
-    public int Peek()
-    {
-        return _bits.Skip(_currentLocation).Take(1).Single();
     }
 }
 
